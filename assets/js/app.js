@@ -207,15 +207,17 @@
       html += `
         <div class="verse-card" data-verse="${v.n}" id="verse-${v.n}">
           <div class="verse-top">
-            <span class="verse-num">${toAr(v.n)}</span>
+            <div class="verse-meta-row">
+              <span class="verse-num">${toAr(v.n)}</span>
+              <div class="verse-actions">
+                <button class="v-btn v-play-btn" data-play="${v.n}" title="تشغيل البيت صوتياً">▶</button>
+                <button class="v-btn" data-explain="${v.n}" title="عرض شرح الوافي">الشرح</button>
+                <button class="v-btn ${isSaved ? 'saved' : ''}" data-bm="${v.n}" title="حفظ البيت">${isSaved ? '★' : '☆'}</button>
+              </div>
+            </div>
             <div class="verse-lines">
               <div class="hemistich">${renderTokensHTML(v.st)}</div>
               <div class="hemistich">${renderTokensHTML(v.at)}</div>
-            </div>
-            <div class="verse-actions">
-              <button class="v-btn v-play-btn" data-play="${v.n}" title="تشغيل البيت صوتياً">▶</button>
-              <button class="v-btn" data-explain="${v.n}" title="عرض شرح الوافي">الشرح</button>
-              <button class="v-btn ${isSaved ? 'saved' : ''}" data-bm="${v.n}" title="حفظ البيت">${isSaved ? '★' : '☆'}</button>
             </div>
           </div>
         </div>
@@ -311,12 +313,6 @@
     noteEl.style.display = info.note ? 'block' : 'none';
 
     symPop.style.display = 'block';
-    const rect = symPop.getBoundingClientRect();
-    let left = Math.min(Math.max(12, x - rect.width / 2), window.innerWidth - rect.width - 12);
-    let top = y + 16;
-    if (top + rect.height > window.innerHeight - 12) top = Math.max(12, y - rect.height - 14);
-    symPop.style.left = left + 'px';
-    symPop.style.top = top + 'px';
   }
   function hidePopover() { symPop.style.display = 'none'; }
   document.getElementById('spClose').addEventListener('click', hidePopover);
@@ -825,16 +821,7 @@
   renderPage(currentPage);
 
 
-  // Mobile & PWA Modal + Service Worker
-  const mobileModal = document.getElementById('mobileModal');
-  const openMobileBtn = document.getElementById('openMobileBtn');
-  const mmClose = document.getElementById('mmClose');
-  if (openMobileBtn && mobileModal) {
-    openMobileBtn.addEventListener('click', () => mobileModal.classList.add('open'));
-    mmClose.addEventListener('click', () => mobileModal.classList.remove('open'));
-    mobileModal.addEventListener('click', e => { if (e.target === mobileModal) mobileModal.classList.remove('open'); });
-  }
-
+  // PWA Install Prompt & Service Worker
   let deferredInstallPrompt = null;
   const installPwaBtn = document.getElementById('installPwaBtn');
   window.addEventListener('beforeinstallprompt', e => {
