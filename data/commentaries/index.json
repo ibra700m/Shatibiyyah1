@@ -1,0 +1,12 @@
+{
+  "default": "wafi",
+  "commentaries": [
+    {
+      "id": "wafi",
+      "title": "الوافي في شرح الشاطبية",
+      "author": "الشيخ عبد الفتاح القاضي",
+      "builtin": true,
+      "file": ""
+    }
+  ]
+}

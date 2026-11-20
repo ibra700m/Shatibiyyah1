@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1b4d3e"/>
+      <stop offset="100%" stop-color="#0d2b22"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="42" fill="url(#g)"/>
+  <rect x="11" y="11" width="168" height="168" rx="32" fill="none" stroke="#d4a64a" stroke-width="2" opacity="0.65"/>
+  <text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" fill="#f9eed7" font-family="Amiri, Traditional Arabic, serif" font-size="99" font-weight="700">ش</text>
+  <text x="50%" y="84%" dominant-baseline="middle" text-anchor="middle" fill="#d4a64a" font-family="Tajawal, sans-serif" font-size="21" font-weight="700">حرز الأماني</text>
+</svg>

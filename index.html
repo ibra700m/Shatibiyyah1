@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الشاطبية التفاعلية الكاملة — حرز الأماني وشرح الوافي</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="assets/icons/icon-192.svg">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.svg">
+<meta name="theme-color" content="#1b4d3e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-emblem">ش</div>
+      <div>
+        <h1>الشاطبية التفاعلية الكاملة</h1>
+        <p>متن حرز الأماني (١ – ١١٧٣) مع شرح «الوافي» كاملاً — ٧٨ باباً</p>
+      </div>
+    </div>
+
+    <nav class="nav-tabs" aria-label="التنقل الرئيسي">
+      <button class="nav-btn active" data-view="reader">المتن التفاعلي</button>
+      <button class="nav-btn" data-view="search">البحث والفهرس</button>
+      <button class="nav-btn" data-view="bookmarks">المحفوظات (<span id="bmCount">0</span>)</button>
+      <button class="nav-btn" data-view="trainer">التدريب الآلي</button>
+      <button class="nav-btn" data-view="quiz">الاختبارات</button>
+    </nav>
+
+    <div class="header-tools">
+      <button class="tool-btn install-btn" id="installPwaBtn" style="display:none" title="تثبيت كتطبيق مستقل">📲 تثبيت التطبيق</button>
+      <button class="tool-btn" id="openMobileBtn" title="فتح الموقع على الهاتف وتثبيته كتطبيق">📱 الهاتف والتطبيق</button>
+      <button class="tool-btn gold" id="openRefBtn" title="بطاقة الرموز السريعة">بطاقة الرموز</button>
+      <button class="tool-btn" id="fontDec" title="تصغير الخط">A-</button>
+      <button class="tool-btn" id="fontInc" title="تكبير الخط">A+</button>
+      <button class="tool-btn" id="themeToggle" title="الوضع الليلي">☾</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. READER VIEW -->
+  <section id="view-reader" class="view active">
+    <div class="section-pills" role="tablist" aria-label="أقسام المنظومة">
+      <button class="sec-pill active" data-sec="all">المنظومة كاملة (٧٨ باباً)</button>
+      <button class="sec-pill" data-sec="osool">الأصول (١ – ٤٤٤)</button>
+      <button class="sec-pill" data-sec="farsh">فرش الحروف (٤٤٥ – ١١٢٠)</button>
+      <button class="sec-pill" data-sec="khatimah">التكبير والمخارج والخاتمة (١١٢١ – ١١٧٣)</button>
+    </div>
+
+    <div class="reader-bar">
+      <div class="reader-controls">
+        <select id="chapterSelect" class="chapter-select" aria-label="اختر الباب"></select>
+        <div class="jump-box">
+          <input type="text" id="jumpVerseInput" class="jump-input" placeholder="بيت ١–١١٧٣" inputmode="numeric" aria-label="الانتقال إلى رقم بيت">
+          <button class="tool-btn" id="jumpVerseBtn">انتقال</button>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="dot-letter">ح</span> رمز حرفي (اضغط مرة)</span>
+        <span class="legend-item"><span class="dot-word">سَمَا</span> رمز كلمي (اضغط مرة)</span>
+        <span class="legend-item">▶ تشغيل البيت • 💡 ضغط مطوّل أو «الشرح» لعرض الوافي</span>
+      </div>
+    </div>
+
+    <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="book-viewport" id="bookViewport">
+      <div class="book-page" id="bookPage"></div>
+    </div>
+
+    <div class="pager">
+      <button class="page-nav-btn" id="prevPageBtn">→ الصفحة السابقة</button>
+      <div class="page-status">
+        <span id="pageInfo">صفحة ١ / ١</span>
+        <input type="range" id="pageSlider" class="page-range" min="1" max="1" value="1">
+      </div>
+      <button class="page-nav-btn" id="nextPageBtn">الصفحة التالية ←</button>
+    </div>
+  </section>
+
+  <!-- 2. SEARCH & INDEX VIEW -->
+  <section id="view-search" class="view">
+    <div class="panel-card">
+      <h2 style="margin-top:0;color:var(--accent)">البحث الشامل في المتن والرموز وشرح «الوافي» (١١٧٣ بيتاً)</h2>
+      <div class="search-row">
+        <input type="text" id="searchInput" class="input-box" placeholder="ابحث بكلمة قرآنية، أو بيت، أو رقم بيت، أو اسم قارئ (ورش، السوسي، صحبة، سما)...">
+        <select id="searchSecFilter" class="chapter-select" style="min-width:170px">
+          <option value="all">كل الأقسام</option>
+          <option value="osool">الأصول فقط</option>
+          <option value="farsh">فرش الحروف فقط</option>
+          <option value="khatimah">التكبير والمخارج والخاتمة</option>
+        </select>
+        <select id="searchChapFilter" class="chapter-select" style="min-width:220px"></select>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;font-weight:700;cursor:pointer">
+          <input type="checkbox" id="onlySymbolsCheck"> الأبيات ذات الرموز فقط
+        </label>
+      </div>
+      <div id="searchStats" style="font-size:.85rem;color:var(--ink-muted);margin-bottom:10px"></div>
+      <div id="searchResults"></div>
+    </div>
+
+    <div class="panel-card">
+      <h2 style="margin-top:0;color:var(--accent)">فهرس أبواب الشاطبية الكامل (٧٨ باباً — ١١٧٣ بيتاً)</h2>
+      <div id="chaptersIndexHost"></div>
+    </div>
+  </section>
+
+  <!-- 3. BOOKMARKS VIEW -->
+  <section id="view-bookmarks" class="view">
+    <div class="panel-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <h2 style="margin:0;color:var(--accent)">الأبيات المحفوظة وملاحظات المراجعة</h2>
+        <button class="tool-btn" id="exportBmBtn">تصدير المحفوظات (JSON)</button>
+      </div>
+      <div id="bookmarksList"></div>
+    </div>
+  </section>
+
+  <!-- 4. QUIZ VIEW -->
+  <section id="view-quiz" class="view">
+    <div class="panel-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <div>
+          <h2 style="margin:0;color:var(--accent)">بنك اختبارات الشاطبية (الأصول والفرش والخاتمة)</h2>
+          <p style="margin:4px 0 0;font-size:.86rem;color:var(--ink-muted)">اختبر ضبطك للرموز والأحكام، وأضف أسئلتك الخاصة لبنك الأسئلة القابل للتوسّع</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="tool-btn gold" id="toggleAddQBtn">+ إضافة سؤال جديد</button>
+          <button class="tool-btn" id="exportQuizBtn">تصدير البنك JSON</button>
+          <label class="tool-btn" style="cursor:pointer">استيراد JSON<input type="file" id="importQuizInput" accept=".json" hidden></label>
+        </div>
+      </div>
+
+      <div id="addQForm" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px">
+        <h3 style="margin-top:0;font-size:1rem;color:var(--accent)">إضافة سؤال جديد إلى البنك</h3>
+        <div class="search-row">
+          <input id="nqChap" class="input-box" placeholder="اسم الباب (مثل: فرش سورة البقرة)">
+          <select id="nqLevel" class="chapter-select" style="min-width:130px">
+            <option value="متوسط">متوسط</option>
+            <option value="متقدم">متقدم</option>
+          </select>
+        </div>
+        <input id="nqText" class="input-box" style="width:100%;margin-bottom:8px" placeholder="نص السؤال">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <input id="nqO0" class="input-box" placeholder="الخيار ١">
+          <input id="nqO1" class="input-box" placeholder="الخيار ٢">
+          <input id="nqO2" class="input-box" placeholder="الخيار ٣">
+          <input id="nqO3" class="input-box" placeholder="الخيار ٤">
+        </div>
+        <div class="search-row">
+          <select id="nqAns" class="chapter-select" style="min-width:160px">
+            <option value="0">الإجابة الصحيحة: الخيار ١</option>
+            <option value="1">الإجابة الصحيحة: الخيار ٢</option>
+            <option value="2">الإجابة الصحيحة: الخيار ٣</option>
+            <option value="3">الإجابة الصحيحة: الخيار ٤</option>
+          </select>
+          <input id="nqExp" class="input-box" placeholder="التعليل أو البيت الشاهد (اختياري)">
+          <button class="page-nav-btn" id="saveQBtn">حفظ السؤال</button>
+        </div>
+      </div>
+
+      <div class="search-row" style="align-items:center">
+        <select id="quizChapFilter" class="chapter-select" style="min-width:220px"></select>
+        <select id="quizLevelFilter" class="chapter-select" style="min-width:140px">
+          <option value="all">كل المستويات</option>
+          <option value="متوسط">متوسط</option>
+          <option value="متقدم">متقدم</option>
+        </select>
+        <button class="page-nav-btn" id="startQuizBtn">بدء / إعادة الاختبار</button>
+        <span id="quizScoreBadge" style="font-weight:800;color:var(--accent);font-size:.92rem"></span>
+      </div>
+
+      <div id="quizContainer"></div>
+    </div>
+  </section>
+
+  <!-- 5. AUTOMATIC SYMBOL TRAINER VIEW -->
+  <section id="view-trainer" class="view">
+    <div class="panel-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+        <div>
+          <h2 style="margin:0;color:var(--accent)">وضع التدريب الآلي الذكي على رموز الشاطبية</h2>
+          <p style="margin:4px 0 0;font-size:.86rem;color:var(--ink-muted)">توليد تلقائي لمئات التدريبات التفاعلية مباشرةً من ١,٦٠٥ رموز مرمّزة في الأصول والفرش مع خريطة الإتقان ومراجعة الأخطاء</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="tool-btn gold" id="trWeakBtn" title="تدريب مركّز على الرموز التي أخطأت فيها">🎯 مراجعة نقاط ضعفي (<span id="trWeakCount">٠</span>)</button>
+          <button class="tool-btn" id="trResetStatsBtn" style="color:var(--sym-red)">تصفير الإحصائيات</button>
+        </div>
+      </div>
+
+      <div class="tr-kpi-grid">
+        <div class="tr-kpi">
+          <div class="tr-kpi-val" id="trTotalAnswered">٠</div>
+          <div class="tr-kpi-lbl">إجمالي الإجابات</div>
+        </div>
+        <div class="tr-kpi">
+          <div class="tr-kpi-val" id="trOverallAcc">٠%</div>
+          <div class="tr-kpi-lbl">نسبة الإتقان</div>
+        </div>
+        <div class="tr-kpi">
+          <div class="tr-kpi-val" id="trBestStreak">٠</div>
+          <div class="tr-kpi-lbl">أعلى سلسلة صحيحة 🔥</div>
+        </div>
+        <div class="tr-kpi">
+          <div class="tr-kpi-val" id="trMasteredCount">٠ / ٣٥</div>
+          <div class="tr-kpi-lbl">الرموز المتقنة</div>
+        </div>
+      </div>
+
+      <div class="tr-mode-pills" id="trModePills" role="tablist" aria-label="أنماط التدريب الآلي">
+        <button class="tr-mode-pill active" data-tmode="mixed">✨ مختلط ذكي</button>
+        <button class="tr-mode-pill" data-tmode="decode">🔴 فكّ الرمز في البيت</button>
+        <button class="tr-mode-pill" data-tmode="spot">👆 استخرج الرمز بالضغط (بلا تلوين)</button>
+        <button class="tr-mode-pill" data-tmode="flash">⚡ تحدي الرمز السريع (قارئ ⇄ رمز)</button>
+      </div>
+
+      <div class="search-row" style="align-items:center;margin-bottom:8px">
+        <select id="trScopeFilter" class="chapter-select" style="min-width:155px">
+          <option value="all">المنظومة كاملة</option>
+          <option value="osool">الأصول فقط (١–٤٤٤)</option>
+          <option value="farsh">فرش الحروف فقط (٤٤٥–١١٢٠)</option>
+        </select>
+        <select id="trChapterSelect" class="chapter-select" style="min-width:210px">
+          <option value="all">جميع الأبواب ذات الرموز (٦٢ باباً)</option>
+        </select>
+        <select id="trCatFilter" class="chapter-select" style="min-width:190px">
+          <option value="all">جميع فئات الرموز (٣٥ رمزاً)</option>
+          <option value="indiv">الحرفية الفردية (أبج..رست)</option>
+          <option value="group">الحرفية الجماعية (ثخذ ظغش)</option>
+          <option value="word">الرموز الكلمية الثمان</option>
+        </select>
+        <select id="trLenSelect" class="chapter-select" style="min-width:130px">
+          <option value="10">١٠ أسئلة</option>
+          <option value="20">٢٠ سؤالاً</option>
+          <option value="30">٣٠ سؤالاً</option>
+          <option value="0">تدريب مفتوح ∞</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.86rem;font-weight:700;cursor:pointer">
+          <input type="checkbox" id="trTimerCheck">
+          ⏱ مؤقّت ١٥ث
+        </label>
+        <button class="page-nav-btn" id="trStartBtn">▶ بدء جلسة جديدة</button>
+      </div>
+
+      <div id="trFocusNotice" style="display:none;margin-bottom:8px;padding:7px 12px;border-radius:10px;background:var(--gold-soft);font-size:.85rem;font-weight:700;color:var(--ink);justify-content:space-between;align-items:center;gap:8px">
+        <span id="trFocusText"></span>
+        <button class="v-btn" id="trClearFocusBtn">إلغاء التركيز</button>
+      </div>
+
+      <div id="trArena"></div>
+    </div>
+
+    <div class="panel-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+        <div>
+          <h3 style="margin:0;color:var(--accent)">خريطة إتقان رموز الشاطبية (٣٥ رمزاً)</h3>
+          <p style="margin:3px 0 0;font-size:.82rem;color:var(--ink-muted)">اضغط على أي رمز لبدء تدريب فوري مركّز على أبياته — 🟢 متقَن (≥٨٥%) • 🟡 قيد التثبيت • 🔴 يحتاج مراجعة</p>
+        </div>
+      </div>
+      <div id="trHeatmapHost"></div>
+    </div>
+  </section>
+</main>
+
+<!-- PERSISTENT AUDIO PLAYER & REPEAT DOCK -->
+<aside class="audio-dock" id="audioDock" aria-label="المشغّل الصوتي وميزة التكرار">
+  <div class="audio-dock-inner">
+    <div class="repeat-drawer" id="repeatDrawer">
+      <div class="repeat-grid">
+        <div class="repeat-group">
+          <label for="verseRepeatSelect">تكرار البيت:</label>
+          <select id="verseRepeatSelect" class="mini-select">
+            <option value="1">١× (بدون تكرار)</option>
+            <option value="2">٢×</option>
+            <option value="3">٣×</option>
+            <option value="5">٥×</option>
+            <option value="7">٧×</option>
+            <option value="10">١٠×</option>
+            <option value="0">∞ لا نهائي</option>
+          </select>
+        </div>
+
+        <div class="repeat-group">
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--ink)">
+            <input type="checkbox" id="rangeLoopCheck">
+            تكرار نطاق:
+          </label>
+          <span>من</span>
+          <input type="number" id="rangeStartInput" class="mini-num" min="1" max="1173" value="1">
+          <span>إلى</span>
+          <input type="number" id="rangeEndInput" class="mini-num" min="1" max="1173" value="10">
+          <select id="rangeRepeatSelect" class="mini-select" title="عدد مرات تكرار النطاق كاملاً">
+            <option value="1">النطاق ١×</option>
+            <option value="2">النطاق ٢×</option>
+            <option value="3" selected>النطاق ٣×</option>
+            <option value="5">النطاق ٥×</option>
+            <option value="10">النطاق ١٠×</option>
+            <option value="0">النطاق ∞</option>
+          </select>
+        </div>
+
+        <div class="repeat-group">
+          <label for="pauseGapSelect">مهلة ترديد:</label>
+          <select id="pauseGapSelect" class="mini-select" title="فترة سكتة بين الأبيات للترديد والحفظ">
+            <option value="0">بلا توقف</option>
+            <option value="1">١ ثانية</option>
+            <option value="2">٢ ثانية</option>
+            <option value="3">٣ ثوانٍ</option>
+            <option value="5">٥ ثوانٍ</option>
+          </select>
+        </div>
+
+        <div class="repeat-group">
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+            <input type="checkbox" id="autoAdvanceCheck" checked>
+            انتقال تلقائي
+          </label>
+        </div>
+      </div>
+
+      <div class="preset-row">
+        <span style="color:var(--ink-muted);font-weight:700">تحديد سريع للنطاق:</span>
+        <button class="preset-chip" id="presetPageBtn">الصفحة الحالية</button>
+        <button class="preset-chip" id="presetChapterBtn">الباب الحالي كاملاً</button>
+        <button class="preset-chip" id="presetFiveBtn">٥ أبيات من البيت الحالي</button>
+        <button class="preset-chip" id="presetPlayRangeBtn" style="background:var(--accent);color:#fff;border-color:var(--accent)">▶ تشغيل النطاق الآن</button>
+      </div>
+    </div>
+
+    <div class="audio-dock-top">
+      <div class="audio-now-info">
+        <span class="audio-src-badge" id="audioSrcBadge">نطق آلي فوري</span>
+        <span class="audio-verse-preview" id="audioVersePreview">اضغط ▶ بجانب أي بيت لبدء الاستماع والتكرار</span>
+      </div>
+      <span class="audio-loop-status" id="audioLoopStatus"></span>
+      <button class="dock-collapse-btn" id="dockCollapseBtn" title="طي أو إظهار المشغّل">تصغير ▾</button>
+    </div>
+
+    <div class="audio-dock-main">
+      <div class="audio-controls">
+        <button class="a-btn" id="audioPrevBtn" title="البيت السابق">⏮</button>
+        <button class="a-btn primary" id="audioPlayPauseBtn" title="تشغيل / إيقاف مؤقت (Space)">▶</button>
+        <button class="a-btn" id="audioStopBtn" title="إيقاف">⏹</button>
+        <button class="a-btn" id="audioNextBtn" title="البيت التالي">⏭</button>
+      </div>
+
+      <div class="audio-progress-wrap">
+        <input type="range" id="audioSeek" class="audio-seek" min="0" max="100" value="0" aria-label="موضع الصوت">
+        <span class="audio-time" id="audioTimeLabel">00:00 / 00:00</span>
+      </div>
+
+      <div class="audio-extras">
+        <button class="a-btn" id="audioSpeedBtn" title="سرعة القراءة">1×</button>
+        <button class="a-btn" id="toggleRepeatBtn" title="إعدادات التكرار ونطاق الحفظ">🔁 التكرار والحفظ</button>
+        <button class="a-btn" id="openAudioSettingsBtn" title="ربط ملفات MP3 وإعدادات الصوت">⚙ الصوتيات</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- SYMBOL POPOVER -->
+<div class="sym-popover" id="symPopover" role="dialog" aria-live="polite">
+  <div class="sym-pop-head">
+    <span class="sym-badge" id="spBadge">ب</span>
+    <span class="sym-type" id="spType">رمز حرفي</span>
+    <button class="close-x" id="spClose" aria-label="إغلاق">×</button>
+  </div>
+  <div class="sym-readers" id="spReaders"></div>
+  <div style="font-size:.82rem;color:var(--ink-muted)" id="spCat"></div>
+  <div class="sym-note" id="spNote"></div>
+</div>
+
+<!-- WAFI COMMENTARY MODAL -->
+<div class="modal-backdrop" id="wafiModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="wmTitle">شرح البيت</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="v-btn" id="wmPlayBtn">▶ استماع للبيت</button>
+        <button class="v-btn" id="wmBookmarkBtn">☆ حفظ</button>
+        <button class="close-x" id="wmClose">×</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="comm-tabs-bar" id="wmCommTabs"></div>
+      <div class="modal-verse-box" id="wmVerse"></div>
+      <div class="wafi-summary-card">
+        <strong>الخلاصة السريعة (من الوافي):</strong>
+        <div id="wmSummary"></div>
+      </div>
+      <div id="wmFull"></div>
+      <div class="wafi-footnotes" id="wmFootnotes" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SYMBOLS REFERENCE CARD MODAL -->
+<div class="modal-backdrop" id="refModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>بطاقة رموز الشاطبية السريعة</h3>
+      <button class="close-x" id="refClose">×</button>
+    </div>
+    <div class="modal-body" id="refBody"></div>
+  </div>
+</div>
+
+<!-- AUDIO SETTINGS & SYNC STUDIO MODAL -->
+<div class="modal-backdrop" id="audioSettingsModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>إعدادات المشغّل الصوتي وربط القراءات (MP3 / التزامن)</h3>
+      <button class="close-x" id="asClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="audio-mode-cards" id="audioModeCards">
+        <div class="mode-card active" data-amode="auto">
+          <h4>١. الوضع التلقائي الذكي</h4>
+          <p>يشغّل ملفات MP3 إن ربطتها، ويتحوّل تلقائياً للنطق الآلي الفوري عند عدم وجود ملف للبيت.</p>
+        </div>
+        <div class="mode-card" data-amode="mp3">
+          <h4>٢. ملفات MP3 لكل بيت</h4>
+          <p>قراءة حقيقية (كالشيخ أيمن سويد) من مجلد محلي على جهازك أو رابط مباشر.</p>
+        </div>
+        <div class="mode-card" data-amode="chapter">
+          <h4>٣. ملف صوتي كامل للباب</h4>
+          <p>ارفع ملفاً صوتياً واحداً للباب وزامن الأبيات معه بضغطة زر مع تصدير التوقيت.</p>
+        </div>
+        <div class="mode-card" data-amode="tts">
+          <h4>٤. النطق الآلي المدمج</h4>
+          <p>يعمل فوراً داخل المتصفح دون تحميل ملفات؛ مثالي لتجربة التتبع والتكرار فوراً.</p>
+        </div>
+      </div>
+
+      <div class="audio-box">
+        <h4>أولاً: اختيار مجلد ملفات MP3 من جهازك (بيت-بيت)</h4>
+        <p style="margin:0 0 8px;font-size:.84rem;color:var(--ink-muted)">
+          اختر المجلد الذي يضم ملفات الأبيات (يتعرف تلقائياً على التسميات مثل <code>1.mp3</code> أو <code>001.mp3</code> أو <code>0001.mp3</code> أو <code>verse_160.mp3</code>).
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <label class="page-nav-btn" style="cursor:pointer;display:inline-block">
+            📁 اختيار مجلد MP3
+            <input type="file" id="localFolderInput" webkitdirectory directory multiple accept="audio/*" hidden>
+          </label>
+          <button class="tool-btn" id="clearLocalFolderBtn">إلغاء ربط المجلد</button>
+          <span id="localFolderStatus" style="font-size:.84rem;font-weight:700;color:var(--accent)">لم يُختر مجلد محلي بعد</span>
+        </div>
+      </div>
+
+      <div class="audio-box">
+        <h4>ثانياً: مسار مجلد المشروع أو رابط مباشر (URL Template)</h4>
+        <p style="margin:0 0 8px;font-size:.84rem;color:var(--ink-muted)">
+          المتغيرات المدعومة: <code>{0001}</code> (٤ خانات) أو <code>{001}</code> (٣ خانات) أو <code>{1}</code> (رقم مباشر).
+        </p>
+        <div class="search-row" style="margin-bottom:4px;align-items:center">
+          <label style="display:flex;align-items:center;gap:5px;font-size:.86rem;font-weight:700;cursor:pointer">
+            <input type="checkbox" id="useTemplateCheck">
+            تفعيل المسار/الرابط
+          </label>
+          <input type="text" id="urlTemplateInput" class="input-box" dir="ltr" value="audio/{0001}.mp3" placeholder="audio/{0001}.mp3">
+          <button class="tool-btn gold" id="saveTemplateBtn">حفظ المسار</button>
+        </div>
+      </div>
+
+      <div class="audio-box">
+        <h4>ثالثاً: ربط ملف صوتي كامل للباب + أداة مزامنة التوقيت</h4>
+        <div class="search-row" style="margin-bottom:8px;align-items:center">
+          <select id="syncChapterSelect" class="chapter-select" style="min-width:230px"></select>
+          <label class="tool-btn gold" style="cursor:pointer">
+            🎵 اختيار ملف MP3 للباب
+            <input type="file" id="chapterAudioInput" accept="audio/*" hidden>
+          </label>
+          <span id="chapterAudioStatus" style="font-size:.82rem;color:var(--ink-muted);font-weight:700">لا يوجد ملف للباب</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+          <button class="tool-btn" id="syncStartBtn">▶ تشغيل الباب للمزامنة</button>
+          <button class="page-nav-btn" id="syncMarkBtn" style="padding:6px 13px;font-size:.85rem">⏱ تثبيت بداية <span id="syncNextVerseLabel">البيت ١</span></button>
+          <button class="tool-btn" id="exportTimingsBtn">تصدير التوقيت JSON</button>
+          <label class="tool-btn" style="cursor:pointer">استيراد JSON<input type="file" id="importTimingsInput" accept=".json" hidden></label>
+          <button class="tool-btn" id="clearChTimingsBtn" style="color:var(--sym-red)">مسح توقيت الباب</button>
+        </div>
+        <div class="sync-list" id="syncTimingsList"></div>
+      </div>
+
+      <div class="audio-box" style="margin-bottom:0">
+        <h4>رابعاً: اختيار صوت النطق الآلي (عند غياب ملفات MP3)</h4>
+        <div class="search-row" style="margin-bottom:0;align-items:center">
+          <select id="ttsVoiceSelect" class="chapter-select" style="min-width:260px"></select>
+          <button class="tool-btn" id="testTtsBtn">🔊 تجربة الصوت</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MOBILE & PWA GUIDE MODAL -->
+<div class="modal-backdrop" id="mobileModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>📱 فتح الموقع على الهاتف وتثبيته كتطبيق (أندرويد / آيفون / لابتوب)</h3>
+      <button class="close-x" id="mmClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="step-card">
+        <h4>الطريقة الأولى (الأفضل والأسرع — رابط دائم + تثبيت كتطبيق أوفلاين):</h4>
+        <ol style="padding-right:20px;margin:6px 0">
+          <li>ارفع مجلد الموقع مجاناً على <strong>GitHub Pages</strong> أو <strong>Vercel</strong> أو <strong>Netlify Drop</strong> (بمجرد سحب المجلد وإفلاته يعطيك رابطاً مباشراً <code>https://...</code>).</li>
+          <li>افتح الرابط من متصفح هاتفك (<strong>Chrome</strong> في أندرويد أو <strong>Safari</strong> في آيفون).</li>
+          <li>اضغط على قائمة المتصفح واختر <strong>«تثبيت التطبيق» (Install App)</strong> أو <strong>«إضافة إلى الشاشة الرئيسية» (Add to Home Screen)</strong>.</li>
+          <li>سيظهر بأيقونة مستقلة على شاشة هاتفك ويعمل <strong>بدون إنترنت بالكامل</strong> بفضل تقنية PWA المدمجة!</li>
+        </ol>
+      </div>
+
+      <div class="step-card">
+        <h4>الطريقة الثانية (التجربة الفورية الآن من اللابتوب إلى الهاتف عبر نفس شبكة Wi-Fi):</h4>
+        <ol style="padding-right:20px;margin:6px 0">
+          <li>تأكد أن اللابتوب والهاتف متصلان بنفس شبكة الـ <strong>Wi-Fi</strong>.</li>
+          <li>شغّل ملف <code>run_local.bat</code> في مجلد المشروع على اللابتوب؛ سيطبع لك رابط الشبكة المحلي مثل: <code>http://192.168.1.5:8000</code>.</li>
+          <li>اكتب هذا العنوان في متصفح هاتفك وسيفتح الموقع فوراً على شاشة الجوال!</li>
+        </ol>
+      </div>
+
+      <div class="step-card" style="margin-bottom:0">
+        <h4>إضافة شروحات أخرى مستقبلاً:</h4>
+        <p>المشروع مهيّأ لاستقبال شروحات إضافية داخل مجلد <code>data/commentaries/</code> (مثل: <em>سراج القارئ</em> أو <em>إبراز المعاني</em>)، وستظهر تلقائياً كأزرار تبديل أعلى نافذة شرح كل بيت.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- تحميل قاعدة البيانات الكاملة مباشرة (يعمل أوفلاين دون خادم) -->
+<script src="data/shatibiyyah_full.js"></script>
+<script src="assets/js/audio-player.js"></script>
+<script src="assets/js/symbol-trainer.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
