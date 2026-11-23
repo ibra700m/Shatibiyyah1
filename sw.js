@@ -1,5 +1,5 @@
 /* Service Worker — الشاطبية التفاعلية الكاملة (Offline PWA) */
-const CACHE_NAME = 'shatibiyyah-pwa-v4';
+const CACHE_NAME = 'shatibiyyah-pwa-v5';
 const CORE_ASSETS = [
   './',
   './index.html',

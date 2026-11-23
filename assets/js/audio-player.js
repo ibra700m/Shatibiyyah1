@@ -185,7 +185,7 @@ window.initShatAudio = function(APP) {
       if (btn) {
         const playingThis = state.isPlaying && !state.isPaused && vn === state.currentVerse;
         btn.classList.toggle('active', playingThis);
-        btn.textContent = playingThis ? '⏸' : '▶';
+        btn.innerHTML = (playingThis ? '<svg class="ic ic-sm" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/></svg><span>إيقاف</span>' : '<svg class="ic ic-sm" viewBox="0 0 24 24"><polygon points="7,5 19,12 7,19" fill="currentColor" stroke="none"/></svg><span>استماع</span>');
       }
     });
   }
@@ -223,9 +223,9 @@ window.initShatAudio = function(APP) {
       versePreview.textContent = statusNote;
     } else if (v) {
       const ch = chMap[v.ch];
-      versePreview.textContent = `(${toAr(vn)}) ${v.s} ❖ ${v.a} — ${ch.title}`;
+      versePreview.textContent = `(${toAr(vn)}) ${v.s} · ${v.a} — ${ch.title}`;
     }
-    playPauseBtn.textContent = (state.isPlaying && !state.isPaused) ? '⏸' : '▶';
+    playPauseBtn.innerHTML = (state.isPlaying && !state.isPaused) ? '<svg class="ic ic-fill" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>' : '<svg class="ic ic-fill" viewBox="0 0 24 24"><polygon points="7,5 19,12 7,19"/></svg>';
     speedBtn.textContent = `${state.speed}×`;
 
     const hasAnyMp3 = Object.keys(state.localVerseMap).length > 0 || state.useTemplate || Object.keys(state.chapterAudioMap).length > 0;
@@ -252,7 +252,7 @@ window.initShatAudio = function(APP) {
       if (hasChapterAudio) return { backend: 'chapter', chId, url: state.chapterAudioMap[chId].url };
       return {
         backend: 'missing',
-        msg: `لم يُربط ملف صوتي لباب «${chMap[chId].title}» — اضغط «⚙ الصوتيات» لربطه.`
+        msg: `لم يُربط ملف صوتي لباب «${chMap[chId].title}» — اضغط إعدادات الصوت لربطه.`
       };
     }
 
@@ -266,7 +266,7 @@ window.initShatAudio = function(APP) {
     }
     return {
       backend: 'missing',
-      msg: 'لم يُربط مجلد تلاوة MP3 بعد — اضغط «⚙ الصوتيات» لاختيار مجلد القراءة (مثل الشيخ أيمن سويد).'
+      msg: 'لم يُربط مجلد تلاوة MP3 بعد — اضغط إعدادات الصوت لاختيار مجلد القراءة (مثل الشيخ أيمن سويد).'
     };
   }
 
@@ -314,7 +314,7 @@ window.initShatAudio = function(APP) {
 
   function speakVerseTTS(vn, token) {
     if (!('speechSynthesis' in window)) {
-      stopPlayback('المتصفح لا يدعم النطق الآلي — يرجى ربط ملفات MP3 من ⚙ الصوتيات.');
+      stopPlayback('المتصفح لا يدعم النطق الآلي — يرجى ربط ملفات MP3 من إعدادات الصوت.');
       return;
     }
     state.activeBackend = 'tts';
@@ -353,7 +353,7 @@ window.initShatAudio = function(APP) {
       if (token !== state.playToken) return;
       if (ev.error === 'canceled' || ev.error === 'interrupted') return;
       clearTimers();
-      stopPlayback('تعذر تشغيل النطق الآلي — يرجى ربط ملفات MP3 من ⚙ الصوتيات.');
+      stopPlayback('تعذر تشغيل النطق الآلي — يرجى ربط ملفات MP3 من إعدادات الصوت.');
     };
 
     setTimeout(() => {
@@ -495,7 +495,7 @@ window.initShatAudio = function(APP) {
     state.verseRepeatDone = 1;
 
     if (!state.autoAdvance) {
-      stopPlayback(`✔ اكتمل تشغيل البيت ${toAr(state.currentVerse)}`);
+      stopPlayback(`اكتمل تشغيل البيت ${toAr(state.currentVerse)}`);
       return;
     }
 
@@ -509,7 +509,7 @@ window.initShatAudio = function(APP) {
           updateLoopBadge();
           scheduleAfterGap(token, () => playVerseInternal(s, false));
         } else {
-          stopPlayback(`✔ اكتمل تكرار النطاق (${toAr(s)} – ${toAr(e)}) بنجاح`);
+          stopPlayback(`اكتمل تكرار النطاق (${toAr(s)} – ${toAr(e)}) بنجاح`);
         }
       }
       return;
@@ -518,7 +518,7 @@ window.initShatAudio = function(APP) {
     if (state.currentVerse < TOTAL_VERSES) {
       scheduleAfterGap(token, () => playVerseInternal(state.currentVerse + 1, false));
     } else {
-      stopPlayback('✔ أتممت الاستماع إلى المنظومة كاملةً');
+      stopPlayback('أتممت الاستماع إلى المنظومة كاملةً');
     }
   }
 
@@ -638,10 +638,10 @@ window.initShatAudio = function(APP) {
     }
   });
 
-  toggleRepeatBtn.addEventListener('click', () => repeatDrawer.classList.toggle('open'));
+  toggleRepeatBtn.addEventListener('click', () => { dock.classList.remove('collapsed'); repeatDrawer.classList.toggle('open'); });
   collapseBtn.addEventListener('click', () => {
     const collapsed = dock.classList.toggle('collapsed');
-    collapseBtn.textContent = collapsed ? 'إظهار المشغّل ▴' : 'تصغير ▾';
+    collapseBtn.setAttribute('aria-expanded', String(!collapsed));
   });
 
   // Bind Repeat & Memorization Controls
@@ -771,13 +771,13 @@ window.initShatAudio = function(APP) {
       }
     });
     localFolderStatus.textContent = matched
-      ? `✔ تم ربط ${toAr(matched)} ملفاً صوتياً من المجلد بنجاح!`
+      ? `تم ربط ${toAr(matched)} ملفاً صوتياً من المجلد بنجاح!`
       : 'لم يُعثر على ملفات مرقّمة من ١ إلى ١١٧٣ داخل المجلد.';
     if (matched) {
       state.sourceMode = 'mp3';
       saveCfg();
       refreshModeCards();
-      updateDockDisplay(state.currentVerse, `✔ تم ربط ${toAr(matched)} ملفاً صوتياً — اضغط ▶ للاستماع`);
+      updateDockDisplay(state.currentVerse, `تم ربط ${toAr(matched)} ملفاً صوتياً — اضغط للتشغيل`);
     }
   }
 
@@ -792,7 +792,7 @@ window.initShatAudio = function(APP) {
     const persistBtn = document.createElement('button');
     persistBtn.type = 'button';
     persistBtn.className = 'tool-btn gold';
-    persistBtn.textContent = '📌 ربط مجلد دائم (يُحفظ بعد الإغلاق)';
+    persistBtn.textContent = 'ربط مجلد دائم (يُحفظ بعد الإغلاق)';
     persistBtn.addEventListener('click', async () => {
       try {
         const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
@@ -816,7 +816,7 @@ window.initShatAudio = function(APP) {
       const restoreBtn = document.createElement('button');
       restoreBtn.type = 'button';
       restoreBtn.className = 'tool-btn';
-      restoreBtn.textContent = `🔄 تفعيل المجلد المحفوظ (${handle.name})`;
+      restoreBtn.textContent = `تفعيل المجلد المحفوظ (${handle.name})`;
       restoreBtn.addEventListener('click', async () => {
         try {
           const perm = await handle.requestPermission({ mode: 'read' });
@@ -872,7 +872,7 @@ window.initShatAudio = function(APP) {
     state.syncChapterId = chId;
     const ch = chMap[chId];
     const chAudio = state.chapterAudioMap[chId];
-    chapterAudioStatus.textContent = chAudio ? `✔ مرتبط: ${chAudio.name}` : 'لا يوجد ملف محمّل لهذا الباب';
+    chapterAudioStatus.textContent = chAudio ? `مرتبط: ${chAudio.name}` : 'لا يوجد ملف محمّل لهذا الباب';
 
     const tmap = state.chapterTimings[chId] || {};
     let nextUnmarked = ch.verse_start;

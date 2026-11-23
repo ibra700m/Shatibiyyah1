@@ -5,123 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>الشاطبية التفاعلية — حرز الأماني وشرح الوافي</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>حرز الأماني — الشاطبية التفاعلية</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="assets/icons/icon-192.svg">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.svg">
-<meta name="theme-color" content="#1b4d3e">
+<meta name="theme-color" content="#faf6ee" id="metaThemeColor">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
 
-<header class="app-header">
+<!-- MINIMAL EDITORIAL TOP BAR (Auto-hides smoothly on scroll down) -->
+<header class="app-header" id="appHeader">
   <div class="header-inner">
-    <div class="brand">
-      <div class="brand-emblem">ش</div>
-      <div class="brand-text">
-        <h1>الشاطبية التفاعلية</h1>
-        <p>حرز الأماني (١–١١٧٣) وشرح الوافي</p>
-      </div>
-    </div>
+    <button class="chapter-trigger" id="chapterBarBtn" type="button" aria-label="اختيار الباب والانتقال">
+      <span class="chapter-trigger-eyebrow" id="headerSectionLabel">الشاطبية · حرز الأماني</span>
+      <span class="chapter-trigger-row">
+        <span class="chapter-trigger-title" id="headerChapterTitle">باب التقديم للشاطبية</span>
+        <svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </button>
 
     <div class="header-tools">
-      <button class="tool-btn install-btn" id="installPwaBtn" style="display:none" title="تثبيت التطبيق">📲 تثبيت</button>
-      <button class="tool-btn gold" id="openRefBtn" title="بطاقة الرموز السريعة">الرموز</button>
-      <button class="tool-btn" id="fontDec" title="تصغير الخط">A-</button>
-      <button class="tool-btn" id="fontInc" title="تكبير الخط">A+</button>
-      <button class="tool-btn" id="themeToggle" title="الوضع الليلي">☾</button>
+      <button class="icon-btn accent-soft" id="installPwaBtn" style="display:none" type="button" title="تثبيت التطبيق" aria-label="تثبيت التطبيق">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+      </button>
+      <button class="icon-btn" id="openRefBtn" type="button" title="مفتاح الرموز" aria-label="مفتاح الرموز">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 8h6M9 12h4"/></svg>
+      </button>
+      <button class="icon-btn" id="openDisplayBtn" type="button" title="المظهر وحجم الخط" aria-label="المظهر وحجم الخط">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M4 7V5h16v2M12 5v14M9 19h6"/></svg>
+      </button>
     </div>
   </div>
-
-  <nav class="nav-tabs" aria-label="التنقل الرئيسي">
-    <button class="nav-btn active" data-view="reader"><span class="nav-ico">📖</span><span>المتن</span></button>
-    <button class="nav-btn" data-view="search"><span class="nav-ico">🔍</span><span>البحث</span></button>
-    <button class="nav-btn" data-view="bookmarks"><span class="nav-ico">★</span><span>المحفوظ (<span id="bmCount">0</span>)</span></button>
-    <button class="nav-btn" data-view="trainer"><span class="nav-ico">🎯</span><span>التدريب</span></button>
-    <button class="nav-btn" data-view="quiz"><span class="nav-ico">📝</span><span>الاختبار</span></button>
-  </nav>
+  <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
 </header>
 
 <main>
-  <!-- 1. READER VIEW -->
+  <!-- 1. READER VIEW (Pure Editorial Diwan Surface) -->
   <section id="view-reader" class="view active">
-    <div class="section-pills" role="tablist" aria-label="أقسام المنظومة">
-      <button class="sec-pill active" data-sec="all">الكل (٧٨)</button>
-      <button class="sec-pill" data-sec="osool">الأصول (١–٤٤٤)</button>
-      <button class="sec-pill" data-sec="farsh">الفرش (٤٤٥–١١٢٠)</button>
-      <button class="sec-pill" data-sec="khatimah">الخاتمة (١١٢١–١١٧٣)</button>
-    </div>
-
-    <div class="reader-bar">
-      <select id="chapterSelect" class="chapter-select" aria-label="اختر الباب"></select>
-      <div class="reader-sub-row">
-        <div class="jump-box">
-          <input type="text" id="jumpVerseInput" class="jump-input" placeholder="رقم البيت (١–١١٧٣)" inputmode="numeric" aria-label="الانتقال إلى رقم بيت">
-          <button class="tool-btn" id="jumpVerseBtn">انتقال</button>
-        </div>
-        <div class="legend">
-          <span class="legend-item"><span class="dot-letter">ح</span> حرفي</span>
-          <span class="legend-item"><span class="dot-word">سَمَا</span> كلمي</span>
-          <span class="legend-item">💡 اضغط الرمز أو «الشرح»</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
-
     <div class="book-viewport" id="bookViewport">
       <div class="book-page" id="bookPage"></div>
     </div>
 
     <div class="pager">
-      <button class="page-nav-btn" id="prevPageBtn">→ السابق</button>
+      <button class="pager-btn" id="prevPageBtn" type="button" aria-label="الصفحة السابقة">
+        <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        <span>السابق</span>
+      </button>
       <div class="page-status">
         <span id="pageInfo">صفحة ١ / ١</span>
-        <input type="range" id="pageSlider" class="page-range" min="1" max="1" value="1">
+        <input type="range" id="pageSlider" class="page-range" min="1" max="1" value="1" aria-label="التنقل بين الصفحات">
       </div>
-      <button class="page-nav-btn" id="nextPageBtn">التالي ←</button>
+      <button class="pager-btn" id="nextPageBtn" type="button" aria-label="الصفحة التالية">
+        <span>التالي</span>
+        <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
     </div>
   </section>
 
   <!-- 2. SEARCH & INDEX VIEW -->
   <section id="view-search" class="view">
-    <div class="panel-card">
-      <h2 class="panel-title">البحث في المتن والرموز وشرح «الوافي»</h2>
+    <div class="editorial-section">
+      <h2 class="section-heading">البحث في المتن والوافي</h2>
       <div class="search-col">
-        <input type="text" id="searchInput" class="input-box" placeholder="ابحث بكلمة، رقم بيت، أو قارئ (ورش، صحبة، سما)...">
+        <div class="search-field-wrap">
+          <svg class="ic search-field-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input type="text" id="searchInput" class="input-box with-icon" placeholder="كلمة قرآنية، رقم بيت، أو قارئ (ورش، صحبة، سما)...">
+        </div>
         <div class="search-filters-row">
-          <select id="searchSecFilter" class="chapter-select">
+          <select id="searchSecFilter" class="editorial-select" aria-label="القسم">
             <option value="all">كل الأقسام</option>
             <option value="osool">الأصول فقط</option>
             <option value="farsh">فرش الحروف فقط</option>
             <option value="khatimah">التكبير والمخارج والخاتمة</option>
           </select>
-          <select id="searchChapFilter" class="chapter-select"></select>
+          <select id="searchChapFilter" class="editorial-select" aria-label="الباب"></select>
         </div>
         <label class="check-row">
-          <input type="checkbox" id="onlySymbolsCheck"> الأبيات ذات الرموز فقط
+          <input type="checkbox" id="onlySymbolsCheck">
+          <span>حصر النتائج في الأبيات ذات الرموز فقط</span>
         </label>
       </div>
       <div id="searchStats" class="muted-stat"></div>
       <div id="searchResults"></div>
     </div>
 
-    <div class="panel-card">
-      <h2 class="panel-title">فهرس أبواب الشاطبية (٧٨ باباً)</h2>
+    <div class="editorial-section">
+      <h2 class="section-heading">فهرس أبواب المنظومة</h2>
+      <p class="section-sub">٧٨ باباً · ١١٧٣ بيتاً من الأصول والفرش والخاتمة</p>
       <div id="chaptersIndexHost"></div>
     </div>
   </section>
 
   <!-- 3. BOOKMARKS VIEW -->
   <section id="view-bookmarks" class="view">
-    <div class="panel-card">
-      <div class="panel-head-row">
-        <h2 class="panel-title" style="margin:0">الأبيات المحفوظة وملاحظاتك</h2>
-        <button class="tool-btn" id="exportBmBtn">تصدير JSON</button>
+    <div class="editorial-section">
+      <div class="section-head-row">
+        <div>
+          <h2 class="section-heading" style="margin:0">المحفوظات والفوائد</h2>
+          <p class="section-sub">الأبيات المعلمة وملاحظاتك الشخصية</p>
+        </div>
+        <button class="subtle-btn" id="exportBmBtn" type="button">تصدير JSON</button>
       </div>
       <div id="bookmarksList"></div>
     </div>
@@ -129,54 +117,54 @@
 
   <!-- 4. QUIZ VIEW -->
   <section id="view-quiz" class="view">
-    <div class="panel-card">
-      <div class="panel-head-row">
+    <div class="editorial-section">
+      <div class="section-head-row">
         <div>
-          <h2 class="panel-title" style="margin:0">بنك اختبارات الشاطبية</h2>
-          <p class="panel-sub">أسئلة منقّاة في الأصول والفرش والخاتمة</p>
+          <h2 class="section-heading" style="margin:0">بنك الاختبارات</h2>
+          <p class="section-sub">أسئلة محرّرة في الأصول والفرش والخاتمة</p>
         </div>
         <div class="btn-cluster">
-          <button class="tool-btn gold" id="toggleAddQBtn">+ سؤال</button>
-          <button class="tool-btn" id="exportQuizBtn">تصدير</button>
-          <label class="tool-btn" style="cursor:pointer">استيراد<input type="file" id="importQuizInput" accept=".json" hidden></label>
+          <button class="subtle-btn accent-outline" id="toggleAddQBtn" type="button">+ إضافة</button>
+          <button class="subtle-btn" id="exportQuizBtn" type="button">تصدير</button>
+          <label class="subtle-btn" style="cursor:pointer">استيراد<input type="file" id="importQuizInput" accept=".json" hidden></label>
         </div>
       </div>
 
       <div id="addQForm" class="sub-form-box" style="display:none">
-        <h3 style="margin-top:0;font-size:.96rem;color:var(--accent)">إضافة سؤال جديد</h3>
+        <h3 class="sub-form-title">إضافة سؤال جديد إلى البنك</h3>
         <div class="search-col">
           <input id="nqChap" class="input-box" placeholder="اسم الباب (مثل: فرش سورة البقرة)">
-          <select id="nqLevel" class="chapter-select">
+          <select id="nqLevel" class="editorial-select">
             <option value="متوسط">متوسط</option>
             <option value="متقدم">متقدم</option>
           </select>
           <input id="nqText" class="input-box" placeholder="نص السؤال">
-          <input id="nqO0" class="input-box" placeholder="الخيار ١">
-          <input id="nqO1" class="input-box" placeholder="الخيار ٢">
-          <input id="nqO2" class="input-box" placeholder="الخيار ٣">
-          <input id="nqO3" class="input-box" placeholder="الخيار ٤">
-          <select id="nqAns" class="chapter-select">
-            <option value="0">الإجابة الصحيحة: الخيار ١</option>
-            <option value="1">الإجابة الصحيحة: الخيار ٢</option>
-            <option value="2">الإجابة الصحيحة: الخيار ٣</option>
-            <option value="3">الإجابة الصحيحة: الخيار ٤</option>
+          <input id="nqO0" class="input-box" placeholder="الخيار الأول">
+          <input id="nqO1" class="input-box" placeholder="الخيار الثاني">
+          <input id="nqO2" class="input-box" placeholder="الخيار الثالث">
+          <input id="nqO3" class="input-box" placeholder="الخيار الرابع">
+          <select id="nqAns" class="editorial-select">
+            <option value="0">الإجابة الصحيحة: الخيار الأول</option>
+            <option value="1">الإجابة الصحيحة: الخيار الثاني</option>
+            <option value="2">الإجابة الصحيحة: الخيار الثالث</option>
+            <option value="3">الإجابة الصحيحة: الخيار الرابع</option>
           </select>
           <input id="nqExp" class="input-box" placeholder="التعليل أو البيت الشاهد (اختياري)">
-          <button class="page-nav-btn" id="saveQBtn">حفظ السؤال</button>
+          <button class="primary-btn" id="saveQBtn" type="button">حفظ السؤال</button>
         </div>
       </div>
 
-      <div class="search-col" style="margin-bottom:12px">
-        <select id="quizChapFilter" class="chapter-select"></select>
+      <div class="search-col" style="margin-bottom:14px">
+        <select id="quizChapFilter" class="editorial-select" aria-label="باب الاختبار"></select>
         <div class="search-filters-row">
-          <select id="quizLevelFilter" class="chapter-select">
+          <select id="quizLevelFilter" class="editorial-select" aria-label="المستوى">
             <option value="all">كل المستويات</option>
             <option value="متوسط">متوسط</option>
             <option value="متقدم">متقدم</option>
           </select>
-          <button class="page-nav-btn" id="startQuizBtn">بدء الاختبار</button>
+          <button class="primary-btn" id="startQuizBtn" type="button">بدء الاختبار</button>
         </div>
-        <span id="quizScoreBadge" style="font-weight:800;color:var(--accent);font-size:.88rem"></span>
+        <span id="quizScoreBadge" class="inline-score"></span>
       </div>
 
       <div id="quizContainer"></div>
@@ -185,19 +173,19 @@
 
   <!-- 5. AUTOMATIC SYMBOL TRAINER VIEW -->
   <section id="view-trainer" class="view">
-    <div class="panel-card">
-      <div class="panel-head-row">
+    <div class="editorial-section">
+      <div class="section-head-row">
         <div>
-          <h2 class="panel-title" style="margin:0">التدريب الآلي على الرموز</h2>
-          <p class="panel-sub">توليد ذكي من ١,٦٠٥ رموز مرمّزة في الأصول والفرش</p>
+          <h2 class="section-heading" style="margin:0">التدريب الآلي على الرموز</h2>
+          <p class="section-sub">من ١,٦٠٥ رموز مرمّزة في المنظومة</p>
         </div>
         <div class="btn-cluster">
-          <button class="tool-btn gold" id="trWeakBtn">🎯 نقاط ضعفي (<span id="trWeakCount">٠</span>)</button>
-          <button class="tool-btn" id="trResetStatsBtn" style="color:var(--sym-red)">تصفير</button>
+          <button class="subtle-btn accent-outline" id="trWeakBtn" type="button">نقاط ضعفي (<span id="trWeakCount">٠</span>)</button>
+          <button class="subtle-btn danger-text" id="trResetStatsBtn" type="button">تصفير</button>
         </div>
       </div>
 
-      <div class="tr-kpi-grid">
+      <div class="tr-kpi-strip">
         <div class="tr-kpi">
           <div class="tr-kpi-val" id="trTotalAnswered">٠</div>
           <div class="tr-kpi-lbl">الإجابات</div>
@@ -208,7 +196,7 @@
         </div>
         <div class="tr-kpi">
           <div class="tr-kpi-val" id="trBestStreak">٠</div>
-          <div class="tr-kpi-lbl">أعلى سلسلة 🔥</div>
+          <div class="tr-kpi-lbl">أعلى سلسلة</div>
         </div>
         <div class="tr-kpi">
           <div class="tr-kpi-val" id="trMasteredCount">٠ / ٣٥</div>
@@ -217,85 +205,95 @@
       </div>
 
       <div class="tr-mode-pills" id="trModePills" role="tablist" aria-label="أنماط التدريب الآلي">
-        <button class="tr-mode-pill active" data-tmode="mixed">✨ مختلط</button>
-        <button class="tr-mode-pill" data-tmode="decode">🔴 فكّ الرمز</button>
-        <button class="tr-mode-pill" data-tmode="spot">👆 استخرج بالضغط</button>
-        <button class="tr-mode-pill" data-tmode="flash">⚡ قارئ ⇄ رمز</button>
+        <button class="tr-mode-pill active" data-tmode="mixed" type="button">مختلط ذكي</button>
+        <button class="tr-mode-pill" data-tmode="decode" type="button">فكّ الرمز</button>
+        <button class="tr-mode-pill" data-tmode="spot" type="button">استخرج بالضغط</button>
+        <button class="tr-mode-pill" data-tmode="flash" type="button">قارئ ⇄ رمز</button>
       </div>
 
-      <div class="search-col" style="margin-bottom:8px">
+      <div class="search-col" style="margin-bottom:10px">
         <div class="search-filters-row">
-          <select id="trScopeFilter" class="chapter-select">
+          <select id="trScopeFilter" class="editorial-select" aria-label="نطاق التدريب">
             <option value="all">المنظومة كاملة</option>
             <option value="osool">الأصول فقط</option>
             <option value="farsh">فرش الحروف فقط</option>
           </select>
-          <select id="trCatFilter" class="chapter-select">
+          <select id="trCatFilter" class="editorial-select" aria-label="فئة الرموز">
             <option value="all">كل الرموز (٣٥)</option>
             <option value="indiv">الحرفية الفردية</option>
             <option value="group">الحرفية الجماعية</option>
             <option value="word">الرموز الكلمية</option>
           </select>
         </div>
-        <select id="trChapterSelect" class="chapter-select">
+        <select id="trChapterSelect" class="editorial-select" aria-label="الباب">
           <option value="all">جميع الأبواب ذات الرموز (٦٢ باباً)</option>
         </select>
         <div class="search-filters-row" style="align-items:center">
-          <select id="trLenSelect" class="chapter-select">
+          <select id="trLenSelect" class="editorial-select" aria-label="عدد الأسئلة">
             <option value="10">١٠ أسئلة</option>
             <option value="20">٢٠ سؤالاً</option>
             <option value="30">٣٠ سؤالاً</option>
-            <option value="0">مفتوح ∞</option>
+            <option value="0">تدريب مفتوح</option>
           </select>
-          <label class="check-row" style="margin:0">
-            <input type="checkbox" id="trTimerCheck">
-            ⏱ ١٥ث
-          </label>
-          <button class="page-nav-btn" id="trStartBtn" style="padding:8px 14px">▶ ابدأ</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <label class="check-row" style="margin:0">
+              <input type="checkbox" id="trTimerCheck">
+              <span>مؤقّت ١٥ث</span>
+            </label>
+            <button class="primary-btn" id="trStartBtn" type="button" style="padding:8px 16px">ابدأ</button>
+          </div>
         </div>
       </div>
 
       <div id="trFocusNotice" class="focus-banner" style="display:none">
         <span id="trFocusText"></span>
-        <button class="v-btn" id="trClearFocusBtn">إلغاء</button>
+        <button class="subtle-btn" id="trClearFocusBtn" type="button">إلغاء</button>
       </div>
 
       <div id="trArena"></div>
     </div>
 
-    <div class="panel-card">
-      <h3 class="panel-title" style="font-size:1rem">خريطة إتقان الرموز (٣٥ رمزاً)</h3>
-      <p class="panel-sub" style="margin-bottom:8px">اضغط أي رمز للتدريب عليه — 🟢 متقَن • 🟡 قيد التثبيت • 🔴 يحتاج مراجعة</p>
+    <div class="editorial-section">
+      <h3 class="section-heading" style="font-size:1rem">خريطة إتقان الرموز (٣٥ رمزاً)</h3>
+      <p class="section-sub" style="margin-bottom:10px">اضغط على أي رمز للتدريب المركّز على أبياته</p>
       <div id="trHeatmapHost"></div>
     </div>
   </section>
 </main>
 
-<!-- PERSISTENT COMPACT MOBILE AUDIO PLAYER & REPEAT DOCK -->
-<aside class="audio-dock" id="audioDock" aria-label="المشغّل الصوتي وميزة التكرار">
+<!-- FLOATING MINIMAL AUDIO PILL (Sits neatly above Bottom Tab Bar) -->
+<aside class="audio-dock collapsed" id="audioDock" aria-label="المشغّل الصوتي وميزة التكرار">
   <div class="audio-dock-inner">
     <div class="repeat-drawer" id="repeatDrawer">
       <div class="repeat-grid">
         <div class="repeat-group">
-          <label for="verseRepeatSelect">تكرار البيت:</label>
+          <label for="verseRepeatSelect">تكرار البيت</label>
           <select id="verseRepeatSelect" class="mini-select">
-            <option value="1">١×</option>
-            <option value="2">٢×</option>
-            <option value="3">٣×</option>
-            <option value="5">٥×</option>
-            <option value="7">٧×</option>
-            <option value="10">١٠×</option>
-            <option value="0">∞</option>
+            <option value="1">مرة</option>
+            <option value="2">مرتان</option>
+            <option value="3">٣ مرات</option>
+            <option value="5">٥ مرات</option>
+            <option value="7">٧ مرات</option>
+            <option value="10">١٠ مرات</option>
+            <option value="0">مستمر ∞</option>
+          </select>
+          <label for="pauseGapSelect">مهلة ترديد</label>
+          <select id="pauseGapSelect" class="mini-select">
+            <option value="0">بلا مهلة</option>
+            <option value="1">١ ث</option>
+            <option value="2">٢ ث</option>
+            <option value="3">٣ ث</option>
+            <option value="5">٥ ث</option>
           </select>
         </div>
 
         <div class="repeat-group">
           <label class="check-row" style="margin:0">
             <input type="checkbox" id="rangeLoopCheck">
-            نطاق:
+            <span>تكرار نطاق</span>
           </label>
           <input type="number" id="rangeStartInput" class="mini-num" min="1" max="1173" value="1" aria-label="من بيت">
-          <span>←</span>
+          <span class="muted-sep">—</span>
           <input type="number" id="rangeEndInput" class="mini-num" min="1" max="1173" value="10" aria-label="إلى بيت">
           <select id="rangeRepeatSelect" class="mini-select" title="تكرار النطاق">
             <option value="1">١×</option>
@@ -308,88 +306,196 @@
         </div>
 
         <div class="repeat-group">
-          <label for="pauseGapSelect">مهلة:</label>
-          <select id="pauseGapSelect" class="mini-select">
-            <option value="0">٠ث</option>
-            <option value="1">١ث</option>
-            <option value="2">٢ث</option>
-            <option value="3">٣ث</option>
-            <option value="5">٥ث</option>
-          </select>
           <label class="check-row" style="margin:0">
             <input type="checkbox" id="autoAdvanceCheck" checked>
-            تلقائي
+            <span>انتقال تلقائي للبيت التالي</span>
           </label>
         </div>
       </div>
 
       <div class="preset-row">
-        <button class="preset-chip" id="presetPageBtn">الصفحة</button>
-        <button class="preset-chip" id="presetChapterBtn">الباب</button>
-        <button class="preset-chip" id="presetFiveBtn">٥ أبيات</button>
-        <button class="preset-chip" id="presetPlayRangeBtn" style="background:var(--accent);color:#fff;border-color:var(--accent)">▶ تشغيل النطاق</button>
+        <button class="preset-chip" id="presetPageBtn" type="button">الصفحة</button>
+        <button class="preset-chip" id="presetChapterBtn" type="button">الباب</button>
+        <button class="preset-chip" id="presetFiveBtn" type="button">٥ أبيات</button>
+        <button class="preset-chip primary-chip" id="presetPlayRangeBtn" type="button">تشغيل النطاق</button>
       </div>
     </div>
 
     <div class="audio-dock-top">
+      <button class="pill-play-btn" id="audioPlayPauseBtn" type="button" title="تشغيل أو إيقاف" aria-label="تشغيل أو إيقاف">
+        <svg class="ic ic-fill" viewBox="0 0 24 24"><polygon points="7,5 19,12 7,19"/></svg>
+      </button>
       <div class="audio-now-info">
         <span class="audio-src-badge" id="audioSrcBadge">MP3</span>
-        <span class="audio-verse-preview" id="audioVersePreview">اضغط ▶ بجانب أي بيت للاستماع</span>
+        <span class="audio-verse-preview" id="audioVersePreview">الاستماع والتكرار</span>
       </div>
       <span class="audio-loop-status" id="audioLoopStatus"></span>
-      <button class="dock-collapse-btn" id="dockCollapseBtn" title="طي المشغّل">▾</button>
+      <button class="dock-expand-btn" id="dockCollapseBtn" type="button" title="توسيع أدوات الصوت والتكرار" aria-label="توسيع أدوات الصوت">
+        <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+      </button>
     </div>
 
     <div class="audio-dock-main">
-      <div class="audio-controls">
-        <button class="a-btn" id="audioPrevBtn" title="السابق">⏮</button>
-        <button class="a-btn primary" id="audioPlayPauseBtn" title="تشغيل / إيقاف">▶</button>
-        <button class="a-btn" id="audioStopBtn" title="إيقاف">⏹</button>
-        <button class="a-btn" id="audioNextBtn" title="التالي">⏭</button>
-      </div>
-
-      <div class="audio-extras">
-        <button class="a-btn" id="audioSpeedBtn" title="السرعة">1×</button>
-        <button class="a-btn" id="toggleRepeatBtn" title="التكرار والحفظ">🔁 تكرار</button>
-        <button class="a-btn" id="openAudioSettingsBtn" title="إعدادات الصوت">⚙</button>
-      </div>
-
       <div class="audio-progress-wrap">
         <input type="range" id="audioSeek" class="audio-seek" min="0" max="100" value="0" aria-label="موضع الصوت">
         <span class="audio-time" id="audioTimeLabel">00:00</span>
+      </div>
+
+      <div class="audio-controls-row">
+        <div class="audio-controls">
+          <button class="a-btn" id="audioPrevBtn" type="button" title="البيت السابق" aria-label="البيت السابق">
+            <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M6 5v14M18 6l-9 6 9 6V6z"/></svg>
+          </button>
+          <button class="a-btn" id="audioStopBtn" type="button" title="إيقاف" aria-label="إيقاف">
+            <svg class="ic ic-sm" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>
+          </button>
+          <button class="a-btn" id="audioNextBtn" type="button" title="البيت التالي" aria-label="البيت التالي">
+            <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M18 5v14M6 6l9 6-9 6V6z"/></svg>
+          </button>
+        </div>
+
+        <div class="audio-extras">
+          <button class="a-btn" id="audioSpeedBtn" type="button" title="سرعة القراءة">1×</button>
+          <button class="a-btn" id="toggleRepeatBtn" type="button" title="التكرار والحفظ">
+            <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+            <span>التكرار</span>
+          </button>
+          <button class="a-btn" id="openAudioSettingsBtn" type="button" title="إعدادات الصوت" aria-label="إعدادات الصوت">
+            <svg class="ic ic-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 010 4h-.09c-.66 0-1.25.4-1.51 1z"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </aside>
 
-<!-- MOBILE BOTTOM-SHEET SYMBOL POPOVER -->
+<!-- NATIVE MOBILE BOTTOM TAB BAR -->
+<nav class="bottom-nav" aria-label="التنقل الرئيسي">
+  <button class="nav-btn active" data-view="reader" type="button">
+    <svg class="ic" viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 014.5 3H12v18H4.5A2.5 2.5 0 012 18.5v-13zM22 5.5A2.5 2.5 0 0019.5 3H12v18h7.5a2.5 2.5 0 002.5-2.5v-13z"/></svg>
+    <span>المتن</span>
+  </button>
+  <button class="nav-btn" data-view="search" type="button">
+    <svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span>البحث</span>
+  </button>
+  <button class="nav-btn" data-view="bookmarks" type="button">
+    <svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 011 1v17l-7-4-7 4V4a1 1 0 011-1z"/></svg>
+    <span>المحفوظ <em class="nav-count" id="bmCount">0</em></span>
+  </button>
+  <button class="nav-btn" data-view="trainer" type="button">
+    <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>
+    <span>التدريب</span>
+  </button>
+  <button class="nav-btn" data-view="quiz" type="button">
+    <svg class="ic" viewBox="0 0 24 24"><path d="M9 11l2.5 2.5L16 9"/><rect x="4" y="3" width="16" height="18" rx="2.5"/></svg>
+    <span>الاختبار</span>
+  </button>
+</nav>
+
+<!-- CHAPTER & NAVIGATION BOTTOM SHEET (Progressive Disclosure for clean Reader) -->
+<div class="modal-backdrop" id="chapterSheetModal">
+  <div class="modal-box">
+    <div class="sheet-handle"></div>
+    <div class="modal-head">
+      <h3>التنقّل بين الأبواب والأبيات</h3>
+      <button class="close-x" id="csClose" type="button" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="sheet-label">أقسام المنظومة</div>
+      <div class="section-pills" role="tablist" aria-label="أقسام المنظومة">
+        <button class="sec-pill active" data-sec="all" type="button">المنظومة كاملة (٧٨)</button>
+        <button class="sec-pill" data-sec="osool" type="button">الأصول (١–٤٤٤)</button>
+        <button class="sec-pill" data-sec="farsh" type="button">الفرش (٤٤٥–١١٢٠)</button>
+        <button class="sec-pill" data-sec="khatimah" type="button">الخاتمة (١١٢١–١١٧٣)</button>
+      </div>
+
+      <div class="sheet-label">اختر الباب</div>
+      <select id="chapterSelect" class="editorial-select" aria-label="اختر الباب"></select>
+
+      <div class="sheet-label" style="margin-top:14px">الانتقال المباشر برقم البيت</div>
+      <div class="jump-box">
+        <input type="text" id="jumpVerseInput" class="input-box" placeholder="أدخل رقم البيت من ١ إلى ١١٧٣" inputmode="numeric" aria-label="الانتقال إلى رقم بيت">
+        <button class="primary-btn" id="jumpVerseBtn" type="button">انتقال</button>
+      </div>
+
+      <div class="legend-sheet-note">
+        <span class="legend-item"><span class="dot-letter">ح</span> رمز حرفي</span>
+        <span class="legend-item"><span class="dot-word">سَمَا</span> رمز كلمي</span>
+        <span class="legend-item">المس أي بيت لإظهار أدواته، أو اضغط مطوّلاً للشرح</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DISPLAY & THEME BOTTOM SHEET (Paper / Sepia / Dark + Font Size) -->
+<div class="modal-backdrop" id="displayModal">
+  <div class="modal-box">
+    <div class="sheet-handle"></div>
+    <div class="modal-head">
+      <h3>المظهر والخط</h3>
+      <button class="close-x" id="dmClose" type="button" aria-label="إغلاق">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="sheet-label">لون الورق</div>
+      <div class="theme-picker" id="themePicker">
+        <button class="theme-chip active" data-theme="paper" type="button">
+          <span class="theme-swatch sw-paper">أ</span>
+          <span>ورقي هادئ</span>
+        </button>
+        <button class="theme-chip" data-theme="sepia" type="button">
+          <span class="theme-swatch sw-sepia">أ</span>
+          <span>معتّق دافئ</span>
+        </button>
+        <button class="theme-chip" data-theme="dark" type="button">
+          <span class="theme-swatch sw-dark">أ</span>
+          <span>ليلي داكن</span>
+        </button>
+      </div>
+
+      <div class="sheet-label" style="margin-top:16px">حجم خط الأبيات</div>
+      <div class="font-stepper">
+        <button class="stepper-btn" id="fontDec" type="button">تصغير الخط</button>
+        <span class="font-preview-val" id="fontSizeReadout">عادي</span>
+        <button class="stepper-btn" id="fontInc" type="button">تكبير الخط</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM-SHEET SYMBOL POPOVER -->
 <div class="sym-popover" id="symPopover" role="dialog" aria-live="polite">
   <div class="sym-pop-head">
-    <span class="sym-badge" id="spBadge">ب</span>
-    <span class="sym-type" id="spType">رمز حرفي</span>
-    <button class="close-x" id="spClose" aria-label="إغلاق">×</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sym-badge" id="spBadge">ب</span>
+      <span class="sym-type" id="spType">رمز حرفي</span>
+    </div>
+    <button class="close-x" id="spClose" type="button" aria-label="إغلاق">×</button>
   </div>
   <div class="sym-readers" id="spReaders"></div>
-  <div style="font-size:.82rem;color:var(--ink-muted)" id="spCat"></div>
+  <div class="sym-cat-line" id="spCat"></div>
   <div class="sym-note" id="spNote"></div>
 </div>
 
-<!-- WAFI COMMENTARY BOTTOM-SHEET MODAL -->
+<!-- WAFI COMMENTARY BOTTOM SHEET -->
 <div class="modal-backdrop" id="wafiModal">
   <div class="modal-box">
+    <div class="sheet-handle"></div>
     <div class="modal-head">
       <h3 id="wmTitle">شرح البيت</h3>
       <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
-        <button class="v-btn" id="wmPlayBtn">▶</button>
-        <button class="v-btn" id="wmBookmarkBtn">☆</button>
-        <button class="close-x" id="wmClose">×</button>
+        <button class="icon-btn sm" id="wmPlayBtn" type="button" title="استماع" aria-label="استماع">
+          <svg class="ic ic-sm" viewBox="0 0 24 24"><polygon points="7,5 19,12 7,19" fill="currentColor" stroke="none"/></svg>
+        </button>
+        <button class="icon-btn sm" id="wmBookmarkBtn" type="button" title="حفظ البيت" aria-label="حفظ البيت">حفظ</button>
+        <button class="close-x" id="wmClose" type="button" aria-label="إغلاق">×</button>
       </div>
     </div>
     <div class="modal-body">
       <div class="comm-tabs-bar" id="wmCommTabs"></div>
       <div class="modal-verse-box" id="wmVerse"></div>
       <div class="wafi-summary-card">
-        <strong>الخلاصة السريعة:</strong>
+        <strong>الخلاصة السريعة</strong>
         <div id="wmSummary"></div>
       </div>
       <div id="wmFull"></div>
@@ -401,9 +507,10 @@
 <!-- SYMBOLS REFERENCE CARD MODAL -->
 <div class="modal-backdrop" id="refModal">
   <div class="modal-box">
+    <div class="sheet-handle"></div>
     <div class="modal-head">
-      <h3>بطاقة رموز الشاطبية</h3>
-      <button class="close-x" id="refClose">×</button>
+      <h3>مفتاح رموز الشاطبية</h3>
+      <button class="close-x" id="refClose" type="button" aria-label="إغلاق">×</button>
     </div>
     <div class="modal-body" id="refBody"></div>
   </div>
@@ -412,9 +519,10 @@
 <!-- AUDIO SETTINGS MODAL -->
 <div class="modal-backdrop" id="audioSettingsModal">
   <div class="modal-box">
+    <div class="sheet-handle"></div>
     <div class="modal-head">
       <h3>إعدادات الصوتيات</h3>
-      <button class="close-x" id="asClose">×</button>
+      <button class="close-x" id="asClose" type="button" aria-label="إغلاق">×</button>
     </div>
     <div class="modal-body">
       <div class="audio-mode-cards" id="audioModeCards">
@@ -434,16 +542,14 @@
 
       <div class="audio-box">
         <h4>أولاً: مجلد ملفات MP3 من جهازك</h4>
-        <p style="margin:0 0 8px;font-size:.82rem;color:var(--ink-muted)">
-          يتعرف تلقائياً على <code>1.mp3</code> أو <code>001.mp3</code> أو <code>0001.mp3</code>.
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
-          <label class="page-nav-btn" style="cursor:pointer;display:inline-block;padding:7px 13px;font-size:.86rem">
-            📁 اختيار مجلد MP3
+        <p class="box-hint">يتعرف تلقائياً على <code>1.mp3</code> أو <code>001.mp3</code> أو <code>0001.mp3</code>.</p>
+        <div class="btn-cluster" style="align-items:center">
+          <label class="primary-btn" style="cursor:pointer;display:inline-block">
+            اختيار مجلد MP3
             <input type="file" id="localFolderInput" webkitdirectory directory multiple accept="audio/*" hidden>
           </label>
-          <button class="tool-btn" id="clearLocalFolderBtn">إلغاء الربط</button>
-          <span id="localFolderStatus" style="font-size:.82rem;font-weight:700;color:var(--accent)">لم يُختر مجلد بعد</span>
+          <button class="subtle-btn" id="clearLocalFolderBtn" type="button">إلغاء الربط</button>
+          <span id="localFolderStatus" class="status-hint">لم يُختر مجلد بعد</span>
         </div>
       </div>
 
@@ -452,33 +558,33 @@
         <div class="search-col" style="margin-bottom:4px">
           <label class="check-row" style="margin:0">
             <input type="checkbox" id="useTemplateCheck">
-            تفعيل الرابط: <code>{0001}</code> أو <code>{001}</code> أو <code>{1}</code>
+            <span>تفعيل الرابط: <code>{0001}</code> أو <code>{001}</code> أو <code>{1}</code></span>
           </label>
           <div style="display:flex;gap:6px">
             <input type="text" id="urlTemplateInput" class="input-box" dir="ltr" value="audio/{0001}.mp3" placeholder="https://.../audio/{0001}.mp3">
-            <button class="tool-btn gold" id="saveTemplateBtn">حفظ</button>
+            <button class="subtle-btn accent-outline" id="saveTemplateBtn" type="button">حفظ</button>
           </div>
         </div>
       </div>
 
       <div class="audio-box">
-        <h4>ثالثاً: ملف صوتي للباب + المزامنة</h4>
+        <h4>ثالثاً: ملف صوتي للباب والمزامنة</h4>
         <div class="search-col" style="margin-bottom:8px">
-          <select id="syncChapterSelect" class="chapter-select"></select>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <label class="tool-btn gold" style="cursor:pointer">
-              🎵 ملف MP3 للباب
+          <select id="syncChapterSelect" class="editorial-select"></select>
+          <div class="btn-cluster" style="align-items:center">
+            <label class="subtle-btn accent-outline" style="cursor:pointer">
+              اختيار ملف الباب
               <input type="file" id="chapterAudioInput" accept="audio/*" hidden>
             </label>
-            <span id="chapterAudioStatus" style="font-size:.8rem;color:var(--ink-muted);font-weight:700">لا يوجد ملف</span>
+            <span id="chapterAudioStatus" class="status-hint muted">لا يوجد ملف</span>
           </div>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-          <button class="tool-btn" id="syncStartBtn">▶ تشغيل</button>
-          <button class="page-nav-btn" id="syncMarkBtn" style="padding:6px 12px;font-size:.83rem">⏱ تثبيت <span id="syncNextVerseLabel">البيت ١</span></button>
-          <button class="tool-btn" id="exportTimingsBtn">تصدير</button>
-          <label class="tool-btn" style="cursor:pointer">استيراد<input type="file" id="importTimingsInput" accept=".json" hidden></label>
-          <button class="tool-btn" id="clearChTimingsBtn" style="color:var(--sym-red)">مسح</button>
+        <div class="btn-cluster" style="align-items:center">
+          <button class="subtle-btn" id="syncStartBtn" type="button">تشغيل الباب</button>
+          <button class="primary-btn" id="syncMarkBtn" type="button" style="padding:7px 12px;font-size:.82rem">تثبيت <span id="syncNextVerseLabel">البيت ١</span></button>
+          <button class="subtle-btn" id="exportTimingsBtn" type="button">تصدير</button>
+          <label class="subtle-btn" style="cursor:pointer">استيراد<input type="file" id="importTimingsInput" accept=".json" hidden></label>
+          <button class="subtle-btn danger-text" id="clearChTimingsBtn" type="button">مسح</button>
         </div>
         <div class="sync-list" id="syncTimingsList"></div>
       </div>
@@ -486,8 +592,8 @@
       <div class="audio-box" style="margin-bottom:0">
         <h4>رابعاً: صوت النطق الآلي</h4>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <select id="ttsVoiceSelect" class="chapter-select" style="flex:1"></select>
-          <button class="tool-btn" id="testTtsBtn">🔊 تجربة</button>
+          <select id="ttsVoiceSelect" class="editorial-select" style="flex:1"></select>
+          <button class="subtle-btn" id="testTtsBtn" type="button">تجربة</button>
         </div>
       </div>
     </div>

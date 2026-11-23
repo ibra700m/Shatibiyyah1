@@ -1,16 +1,16 @@
 {
   "id": "./index.html",
-  "name": "الشاطبية التفاعلية الكاملة — حرز الأماني وشرح الوافي",
+  "name": "حرز الأماني — الشاطبية التفاعلية",
   "short_name": "الشاطبية",
-  "description": "تطبيق متن حرز الأماني ووجه التهاني كاملاً (١١٧٣ بيتاً) مع الترميز التفاعلي للقراء، وشرح الوافي، والمشغّل الصوتي، والتدريب الآلي.",
+  "description": "متن حرز الأماني ووجه التهاني كاملاً (١١٧٣ بيتاً) مع الترميز التفاعلي للقراء وشرح الوافي والمشغّل الصوتي والتدريب الآلي.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "dir": "rtl",
   "lang": "ar",
-  "background_color": "#f6f1e7",
-  "theme_color": "#1b4d3e",
+  "background_color": "#faf6ee",
+  "theme_color": "#faf6ee",
   "icons": [
     {
       "src": "assets/icons/icon-192.svg",

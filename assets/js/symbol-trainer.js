@@ -246,7 +246,7 @@ window.initShatTrainer = function(APP) {
 
   function showFocusNotice() {
     if (tr.focusSyms && tr.focusSyms.size) {
-      focusText.textContent = `🎯 ${tr.focusLabel}`;
+      focusText.textContent = `${tr.focusLabel}`;
       focusNotice.style.display = 'flex';
     } else {
       focusNotice.style.display = 'none';
@@ -452,7 +452,7 @@ window.initShatTrainer = function(APP) {
       tr.timerId = setInterval(() => {
         tr.timeLeft--;
         if (tBadge) {
-          tBadge.textContent = `⏱ ${toAr(tr.timeLeft)} ث`;
+          tBadge.textContent = `${toAr(tr.timeLeft)} ث`;
           tBadge.classList.toggle('timer-warn', tr.timeLeft <= 5);
         }
         if (tr.timeLeft <= 0) {
@@ -535,8 +535,8 @@ window.initShatTrainer = function(APP) {
           <span>السؤال ${toAr(tr.idx + 1)} من ${totalTxt} • ${modeLabel}</span>
           <div class="tr-badges-group">
             <span class="tr-pill-badge">النقاط: ${toAr(tr.score)}</span>
-            <span class="tr-pill-badge streak">🔥 السلسلة: ${toAr(tr.streak)}</span>
-            ${tr.timerEnabled ? `<span class="tr-pill-badge" id="trTimerBadge">⏱ ١٥ ث</span>` : ''}
+            <span class="tr-pill-badge streak">السلسلة: ${toAr(tr.streak)}</span>
+            ${tr.timerEnabled ? `<span class="tr-pill-badge" id="trTimerBadge">١٥ ث</span>` : ''}
           </div>
         </div>
         <div class="tr-prog-track"><div class="tr-prog-bar" style="width:${progPct}%"></div></div>
@@ -614,8 +614,8 @@ window.initShatTrainer = function(APP) {
     fb.style.display = 'block';
 
     const verdict = isOk
-      ? '✔ إجابة صحيحة! أحسنت الضبط.'
-      : (timedOut ? '⏱ انتهى الوقت!' : '✘ إجابة غير صحيحة.');
+      ? 'إجابة صحيحة — أحسنت.'
+      : (timedOut ? 'انتهى الوقت.' : 'إجابة غير صحيحة.');
     const catInfo = CAT_MAP[q.sym];
     const noteHtml = (q.occ && q.occ.note)
       ? `<div style="margin-top:4px;font-size:.86rem;color:var(--ink-muted)"><strong>الدلالة في هذا الموضع:</strong> ${escapeHtml(q.occ.note)}</div>`
@@ -623,9 +623,9 @@ window.initShatTrainer = function(APP) {
 
     const verseActions = q.v ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="v-btn" id="trOpenWafiBtn">📖 شرح الوافي</button>
-        <button class="v-btn" id="trPlayVerseBtn">▶ استماع للبيت</button>
-        <button class="v-btn" id="trGoVerseBtn">فتح في المتن</button>
+        <button class="subtle-btn" id="trOpenWafiBtn">شرح الوافي</button>
+        <button class="subtle-btn" id="trPlayVerseBtn">استماع</button>
+        <button class="subtle-btn" id="trGoVerseBtn">فتح في المتن</button>
       </div>
     ` : '<div></div>';
 
@@ -636,7 +636,7 @@ window.initShatTrainer = function(APP) {
       ${noteHtml}
       <div class="tr-feedback-actions">
         ${verseActions}
-        <button class="page-nav-btn" id="trNextBtn">${nextTxt}</button>
+        <button class="primary-btn" id="trNextBtn">${nextTxt}</button>
       </div>
     `;
 
@@ -662,21 +662,21 @@ window.initShatTrainer = function(APP) {
         ${tr.mistakes.map(m => `
           <div class="tr-mistake-row">
             <span>الرمز <strong style="color:var(--sym-red)">«${escapeHtml(m.sym)}»</strong> ← <strong>${escapeHtml(m.readers)}</strong>${m.v ? ` (البيت ${toAr(m.v.n)} — ${escapeHtml(m.occ.chTitle)})` : ''}</span>
-            ${m.v ? `<button class="v-btn" onclick="window.SHAT_APP.openWafi(${m.v.n})">الشرح</button>` : ''}
+            ${m.v ? `<button class="subtle-btn" onclick="window.SHAT_APP.openWafi(${m.v.n})">الشرح</button>` : ''}
           </div>
         `).join('')}
       </div>
-    ` : '<p style="color:var(--accent);font-weight:800">🌟 ممتاز! لم ترتكب أي خطأ في هذه الجلسة.</p>';
+    ` : '<p style="color:var(--accent);font-weight:800">ممتاز — لم ترتكب أي خطأ في هذه الجلسة.</p>';
 
     arena.innerHTML = `
       <div class="tr-arena-card" style="text-align:center">
         <h3 style="margin-top:0;color:var(--accent);font-size:1.3rem">اكتملت جلسة التدريب الآلي!</h3>
         <p style="font-size:1.25rem;font-weight:800;margin:8px 0">
-          النتيجة: ${toAr(tr.score)} من ${toAr(total)} (${toAr(pct)}%) • أعلى سلسلة: 🔥 ${toAr(tr.maxSessionStreak)}
+          النتيجة: ${toAr(tr.score)} من ${toAr(total)} (${toAr(pct)}%) • أعلى سلسلة: ${toAr(tr.maxSessionStreak)}
         </p>
         <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px">
-          <button class="page-nav-btn" id="trAgainBtn">▶ جلسة جديدة</button>
-          ${tr.mistakes.length ? '<button class="tool-btn gold" id="trRetryMistakesBtn">🎯 أعد التدريب على أخطاء هذه الجلسة</button>' : ''}
+          <button class="primary-btn" id="trAgainBtn">جلسة جديدة</button>
+          ${tr.mistakes.length ? '<button class="subtle-btn accent-outline" id="trRetryMistakesBtn">أعد التدريب على أخطاء الجلسة</button>' : ''}
         </div>
         ${mistakesHtml}
       </div>
